@@ -1,0 +1,534 @@
+basePath: /library
+definitions:
+  controller.AddAuthorRequest:
+    properties:
+      firstname:
+        type: string
+      lastname:
+        type: string
+    type: object
+  controller.AddAuthorResponse:
+    properties:
+      data:
+        $ref: '#/definitions/controller.DataAuthor'
+      error: {}
+      success:
+        type: boolean
+    type: object
+  controller.AddBookRequest:
+    properties:
+      author_id:
+        type: string
+      title:
+        type: string
+    type: object
+  controller.AddBookResponse:
+    properties:
+      data:
+        $ref: '#/definitions/controller.DataBook'
+      error: {}
+      success:
+        type: boolean
+    type: object
+  controller.CreateUserRequest:
+    properties:
+      email:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      password:
+        type: string
+    type: object
+  controller.CreateUserResponse:
+    properties:
+      error: {}
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  controller.DataAuthor:
+    properties:
+      author:
+        $ref: '#/definitions/models.AuthorDTO'
+      message:
+        type: string
+    type: object
+  controller.DataAuthors:
+    properties:
+      authors:
+        items:
+          $ref: '#/definitions/models.AuthorDTO'
+        type: array
+      message:
+        type: string
+    type: object
+  controller.DataBook:
+    properties:
+      book:
+        $ref: '#/definitions/models.BookDTO'
+      message:
+        type: string
+    type: object
+  controller.DataBooks:
+    properties:
+      books:
+        items:
+          $ref: '#/definitions/models.BookDTO'
+        type: array
+      message:
+        type: string
+    type: object
+  controller.DataUsers:
+    properties:
+      message:
+        type: string
+      users:
+        items:
+          $ref: '#/definitions/models.UserDTO'
+        type: array
+    type: object
+  controller.ErrorResponse:
+    properties:
+      error:
+        type: string
+      success:
+        type: boolean
+    type: object
+  controller.GetAllAuthorsResponse:
+    properties:
+      data:
+        $ref: '#/definitions/controller.DataAuthors'
+      error:
+        type: string
+      success:
+        type: boolean
+    type: object
+  controller.GetAllBooksResponse:
+    properties:
+      data:
+        $ref: '#/definitions/controller.DataBooks'
+      error:
+        type: string
+      success:
+        type: boolean
+    type: object
+  controller.GetAllUsersResponse:
+    properties:
+      data:
+        $ref: '#/definitions/controller.DataUsers'
+      error:
+        type: string
+      success:
+        type: boolean
+    type: object
+  controller.GetTopAuthorsResponse:
+    properties:
+      data:
+        $ref: '#/definitions/controller.DataAuthors'
+      error:
+        type: string
+      success:
+        type: boolean
+    type: object
+  controller.LogoutResponse:
+    properties:
+      data:
+        example: Logout success
+        type: string
+      error:
+        example: error
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  controller.RentBookByUserResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  models.AuthorDTO:
+    properties:
+      books:
+        items:
+          $ref: '#/definitions/models.BookDTO'
+        type: array
+      firstname:
+        type: string
+      id:
+        type: integer
+      lastname:
+        type: string
+      rating:
+        type: integer
+    type: object
+  models.BookDTO:
+    properties:
+      author:
+        $ref: '#/definitions/models.AuthorDTO'
+      id:
+        type: integer
+      rented:
+        $ref: '#/definitions/models.UserDTO'
+      title:
+        type: string
+    type: object
+  models.UserDTO:
+    properties:
+      email:
+        type: string
+      firstname:
+        type: string
+      id:
+        type: integer
+      lastname:
+        type: string
+      password:
+        type: string
+      rented_books:
+        items:
+          $ref: '#/definitions/models.BookDTO'
+        type: array
+      user_status:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: kirikozavrr@gmail.com
+    name: Kirill Efremenko
+  description: This is a sample Library server
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Library API
+  version: "1.0"
+paths:
+  /authors/add:
+    post:
+      consumes:
+      - application/json
+      description: Adding an author
+      parameters:
+      - description: Author information
+        in: body
+        name: author
+        required: true
+        schema:
+          $ref: '#/definitions/controller.AddAuthorRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.AddAuthorResponse'
+        "400":
+          description: error
+          schema:
+            type: string
+        "404":
+          description: error
+          schema:
+            type: string
+        "500":
+          description: error
+          schema:
+            type: string
+      summary: Add an author
+      tags:
+      - Authors
+  /authors/all:
+    get:
+      consumes:
+      - application/json
+      description: Getting all authors
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.GetAllAuthorsResponse'
+        "400":
+          description: error
+          schema:
+            type: string
+        "404":
+          description: error
+          schema:
+            type: string
+        "500":
+          description: error
+          schema:
+            type: string
+      summary: Get All authors
+      tags:
+      - Authors
+  /authors/top:
+    get:
+      consumes:
+      - application/json
+      description: Getting a top of author with your limit
+      parameters:
+      - description: This is how many authors need to get
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.GetTopAuthorsResponse'
+        "400":
+          description: error
+          schema:
+            type: string
+        "404":
+          description: error
+          schema:
+            type: string
+        "500":
+          description: error
+          schema:
+            type: string
+      summary: Get top authors
+      tags:
+      - Authors
+  /books/add:
+    post:
+      consumes:
+      - application/json
+      description: Adding a book
+      parameters:
+      - description: Book information with author id
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/controller.AddBookRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.AddBookResponse'
+        "400":
+          description: error
+          schema:
+            type: string
+        "404":
+          description: error
+          schema:
+            type: string
+        "500":
+          description: error
+          schema:
+            type: string
+      summary: Add a book
+      tags:
+      - Books
+  /books/all:
+    get:
+      consumes:
+      - application/json
+      description: Getting all Books
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.GetAllBooksResponse'
+        "400":
+          description: error
+          schema:
+            type: string
+        "404":
+          description: error
+          schema:
+            type: string
+        "500":
+          description: error
+          schema:
+            type: string
+      summary: Get All Books
+      tags:
+      - Books
+  /user/all:
+    get:
+      consumes:
+      - application/json
+      description: Getting all Users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.GetAllUsersResponse'
+        "400":
+          description: error
+          schema:
+            type: string
+        "404":
+          description: error
+          schema:
+            type: string
+        "500":
+          description: error
+          schema:
+            type: string
+      summary: Get All Users
+      tags:
+      - User
+  /user/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user with the provided information
+      parameters:
+      - description: User information
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/controller.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.CreateUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.ErrorResponse'
+      summary: Create a new user
+      tags:
+      - User
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate a user by email and password
+      parameters:
+      - description: Email
+        in: query
+        name: email
+        required: true
+        type: string
+      - description: Password
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Access token
+          schema:
+            type: string
+      summary: User login
+      tags:
+      - User
+  /user/logout:
+    post:
+      consumes:
+      - application/json
+      description: Terminate the user session
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Logout success
+          schema:
+            $ref: '#/definitions/controller.LogoutResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: User logout
+      tags:
+      - User
+  /user/rent:
+    post:
+      consumes:
+      - application/json
+      description: Rent a book by a user with the provided user ID and book ID
+      parameters:
+      - description: User ID
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: Book ID
+        in: query
+        name: book_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.RentBookByUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Rent a book by user
+      tags:
+      - User
+  /user/return:
+    post:
+      consumes:
+      - application/json
+      description: Return a book by a user with the provided user ID and book ID
+      parameters:
+      - description: User ID
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: Book ID
+        in: query
+        name: book_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller.RentBookByUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controller.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Return a book by user
+      tags:
+      - User
+securityDefinitions:
+  ApiKeyAuth:
+    description: Type "Bearer" followed by a space and the JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
