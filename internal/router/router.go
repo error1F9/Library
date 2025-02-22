@@ -6,12 +6,18 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/jwtauth/v5"
+	"github.com/rs/cors"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
 func NewApiRouter(c *modules.Controllers, t *token.JWTTokenService) *chi.Mux {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
+	CORS := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://212.22.70.98:8080", "http://localhost:8080"},
+		AllowCredentials: true,
+	})
+	r.Use(CORS.Handler)
 
 	r.Route("/library", func(r chi.Router) {
 		r.Route("/user", func(r chi.Router) {
@@ -39,7 +45,7 @@ func NewApiRouter(c *modules.Controllers, t *token.JWTTokenService) *chi.Mux {
 	})
 
 	r.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("http://localhost:8080/swagger/doc.json"),
+		httpSwagger.URL("/swagger/doc.json"),
 	))
 	return r
 }
