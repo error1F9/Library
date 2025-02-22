@@ -15,6 +15,9 @@ func NewApiRouter(c *modules.Controllers, t *token.JWTTokenService) *chi.Mux {
 	r.Use(middleware.Logger)
 	CORS := cors.New(cors.Options{
 		AllowedOrigins:   []string{"http://212.22.70.98:8080", "http://localhost:8080"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
 		AllowCredentials: true,
 	})
 	r.Use(CORS.Handler)
